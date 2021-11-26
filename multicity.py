@@ -91,10 +91,12 @@ class Auto(Agent):
         if self.checkNeighbors(neighborList, "normalBlock") == "normalBlock" or self.checkNeighbors(neighborList, "trafficLightGreen") == "trafficLightGreen" or self.checkNeighbors(neighborList, "trafficLightRed") == "trafficLightRed" or self.checkNeighbors(neighborList, "auto") == "auto":
           #Si se cumplen estas dos condiciones, avanza
           
+          #Si se cumplen estas condiciones, avanza al siguiente normalBlock
           if self.checkNeighbors(neighborList, "normalBlock") == "normalBlock":
             print("ENTRO NORMAL BLOCK")
             nextmove = (self.pos[0] + self.direction, self.pos[1])
             move = True
+          #Si encuentra un traffic Light, verifica su estado y decide si puede avanzar o no 
           elif self.checkNeighbors(neighborList, "trafficLightGreen") == "trafficLightGreen":
             print("TRAFFIC LIGHT GREEN")
             trafficLight = self.getNeighbor(neighborList,"trafficLightGreen")
@@ -102,6 +104,7 @@ class Auto(Agent):
               nextmove = (self.pos[0] + self.direction, self.pos[1])
               move = True
               self.passedLight = True
+          #Ignora el estado del siguiente semaforo ya que siempre se encontrará en rojo 
           elif self.passedLight:
             nextmove = (self.pos[0] + self.direction, self.pos[1])
             move = True
@@ -126,20 +129,22 @@ class Auto(Agent):
         neighborList = self.model.grid[self.pos[0]][self.pos[1] + self.direction]
         #checar si es un bloque normal, un semaforo o un coche
         if self.checkNeighbors(neighborList, "normalBlock") == "normalBlock" or self.checkNeighbors(neighborList, "trafficLightGreen") == "trafficLightGreen" or self.checkNeighbors(neighborList, "trafficLightRed") == "trafficLightRed" or self.checkNeighbors(neighborList, "auto") == "auto":
-          #Si se cumplen estas dos condiciones, avanza
+          #Si se cumplen estas condiciones, avanza al siguiente normalBlock
           if self.checkNeighbors(neighborList, "normalBlock") == "normalBlock":
             nextmove = (self.pos[0], self.pos[1] + self.direction)
             move = True
-          elif self.checkNeighbors(neighborList, "trafficLight") == "trafficLight":
-            trafficLight = self.getNeighbor(neighborList,"trafficLight")
-            if trafficLight.green and trafficLight.counter >= 4 and self.passedLight == False:
+          #Si encuentra un traffic Light, verifica su estado y decide si puede avanzar o no 
+          elif self.checkNeighbors(neighborList, "trafficLightGreen") == "trafficLightGreen":
+            trafficLight = self.getNeighbor(neighborList,"trafficLightGreen")
+            if trafficLight.green and trafficLight.timer >= 4 and self.passedLight == False:
               nextmove = (self.pos[0], self.pos[1] + self.direction)
               move = True
               self.passedLight = True
-            elif self.passedLight:
-              nextmove = (self.pos[0], self.pos[1] + self.direction)
-              move = True
-              self.passedLight = False
+          #Ignora el estado del siguiente semaforo ya que siempre se encontrará en rojo 
+          elif self.passedLight:
+            nextmove = (self.pos[0], self.pos[1] + self.direction)
+            move = True
+            self.passedLight = False
         else:
           #Significa que ya no hay camino en vertical y ahora comenzará el movimiento en horizontal (X)
           self.horizontal = True

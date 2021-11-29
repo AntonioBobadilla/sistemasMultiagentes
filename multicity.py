@@ -357,6 +357,6 @@ def agent_portrayal(agent):
 
 grid = CanvasGrid(agent_portrayal, 67, 68, 450, 450)
 
-server = ModularServer(Street, [grid], "Multicity", {})
-server.port = 8521
-server.launch()
+# server = ModularServer(Street, [grid], "Multicity", {})
+# server.port = 8521
+# server.launch()

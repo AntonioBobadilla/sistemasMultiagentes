@@ -2,7 +2,7 @@ import flask
 from flask.json import jsonify
 import uuid
 import multicity
-from multicity import Street
+from multicity import Street, Auto, TrafficLight
 
 games = {}
 
@@ -27,7 +27,11 @@ def queryState(id):
         agent = model.schedule.agents[i]
         print("tipo: ", type(agent))
         print("modelo: ", model.schedule.agents)
-        listaAutos.append({"x": agent.pos[0], "y": agent.pos[1], "tipo" : "Auto"})
+        if type(agent) is multicity.Auto:
+            listaAutos.append({"x": agent.pos[0], "y": agent.pos[1], "tipo" : "Auto"})
+        if type(agent) is multicity.TrafficLight:
+            listaAutos.append({"x": agent.pos[0], "y": agent.pos[1], "tipo" : "TrafficLight"})
+        
         
     return jsonify({"Items":listaAutos})
 

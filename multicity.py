@@ -292,19 +292,20 @@ class Street(Model):
     # auto = Auto(self,(2,61),False)
     # self.grid.place_agent(auto, auto.pos)
     # self.schedule.add(auto)
-    # auto = Auto(self,(2,50),False)
-    # self.grid.place_agent(auto, auto.pos)
-    # self.schedule.add(auto)
-    for x in range(1,3):
-      if x % 2 == 0: #Gray
-        automobile = Auto(self, (x, self.columns-x),False)
-        self.grid.place_agent(automobile, automobile.pos)
-        self.schedule.add(automobile)
+    auto = Auto(self,(0,0),False)
+    self.grid.place_agent(auto, auto.pos)
+    self.schedule.add(auto)
 
-      else: #Yellow
-        automobile = Auto(self, (x, self.columns-x),True)
-        self.grid.place_agent(automobile, automobile.pos)
-        self.schedule.add(automobile)
+    # for x in range(1,3):
+    #   if x % 2 == 0: #Gray
+    #     automobile = Auto(self, (x, self.columns-x),False)
+    #     self.grid.place_agent(automobile, automobile.pos)
+    #     self.schedule.add(automobile)
+
+    #   else: #Yellow
+    #     automobile = Auto(self, (x, self.columns-x),True)
+    #     self.grid.place_agent(automobile, automobile.pos)
+    #     self.schedule.add(automobile)
 
 
   def step(self):

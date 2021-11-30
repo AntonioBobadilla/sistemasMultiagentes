@@ -105,6 +105,8 @@ class Auto(Agent):
             if trafficLight.green and trafficLight.timer >= 4 and self.passedLight == False:
               nextmove = (self.pos[0] + self.direction, self.pos[1])
               move = True
+          if self.checkNeighbors(neighborList, "automobile") == "automobile":
+            move = False
           #Ignora el estado del siguiente semaforo ya que siempre se encontrará en rojo 
         else:
           #Significa que ya no hay camino en horizontal y ahora comenzará el movimiento en vertical 
@@ -136,6 +138,8 @@ class Auto(Agent):
             if trafficLight.green and trafficLight.timer >= 4 and self.passedLight == False:
               nextmove = (self.pos[0], self.pos[1] + self.direction)
               move = True
+          if self.checkNeighbors(neighborList, "automobile") == "automobile":
+            move = False
         else:
           #Significa que ya no hay camino en vertical y ahora comenzará el movimiento en horizontal (X)
           self.horizontal = True
@@ -292,20 +296,23 @@ class Street(Model):
     # auto = Auto(self,(2,61),False)
     # self.grid.place_agent(auto, auto.pos)
     # self.schedule.add(auto)
-    auto = Auto(self,(0,0),False)
-    self.grid.place_agent(auto, auto.pos)
-    self.schedule.add(auto)
+    #auto = Auto(self,(0,0),False)
+    #self.grid.place_agent(auto, auto.pos)
+    #self.schedule.add(auto)
 
-    # for x in range(1,3):
-    #   if x % 2 == 0: #Gray
-    #     automobile = Auto(self, (x, self.columns-x),False)
-    #     self.grid.place_agent(automobile, automobile.pos)
-    #     self.schedule.add(automobile)
+    for x in range(1,3):
+       if x % 2 == 0: #Gray
+         automobile = Auto(self, (x, self.columns-x),False)
+         self.grid.place_agent(automobile, automobile.pos)
+         self.schedule.add(automobile)
+         automobile = Auto(self, (x, self.columns-x-1),False)
+         self.grid.place_agent(automobile, automobile.pos)
+         self.schedule.add(automobile)
+       else: #Yellow
+         automobile = Auto(self, (x, self.columns-x),True)
+         self.grid.place_agent(automobile, automobile.pos)
+         self.schedule.add(automobile)
 
-    #   else: #Yellow
-    #     automobile = Auto(self, (x, self.columns-x),True)
-    #     self.grid.place_agent(automobile, automobile.pos)
-    #     self.schedule.add(automobile)
 
 
   def step(self):
@@ -358,6 +365,6 @@ def agent_portrayal(agent):
 
 grid = CanvasGrid(agent_portrayal, 67, 68, 450, 450)
 
-# server = ModularServer(Street, [grid], "Multicity", {})
-# server.port = 8521
-# server.launch()
+server = ModularServer(Street, [grid], "Multicity", {})
+server.port = 8521
+server.launch()

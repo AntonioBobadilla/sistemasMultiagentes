@@ -28,9 +28,9 @@ def queryState(id):
         print("tipo: ", type(agent))
         print("modelo: ", model.schedule.agents)
         if type(agent) is multicity.Auto:
-            listaAutos.append({"x": agent.pos[0], "y": agent.pos[1], "tipo" : "Auto"})
+            listaAutos.append({"x": agent.pos[0], "y": agent.pos[1], "tipo" : "Auto", "horizontal": agent.horizontal})
         if type(agent) is multicity.TrafficLight:
-            listaAutos.append({"x": agent.pos[0], "y": agent.pos[1], "tipo" : "TrafficLight"})
+            listaAutos.append({"x": agent.pos[0], "y": agent.pos[1], "tipo" : "TrafficLight", "horizontal": False})
         
         
     return jsonify({"Items":listaAutos})

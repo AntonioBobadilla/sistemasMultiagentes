@@ -105,6 +105,8 @@ class Auto(Agent):
             if trafficLight.green and trafficLight.timer >= 4 and self.passedLight == False:
               nextmove = (self.pos[0] + self.direction, self.pos[1])
               move = True
+          if self.checkNeighbors(neighborList, "automobile") == "automobile":
+            move = False
           #Ignora el estado del siguiente semaforo ya que siempre se encontrará en rojo 
         else:
           #Significa que ya no hay camino en horizontal y ahora comenzará el movimiento en vertical 
@@ -136,6 +138,8 @@ class Auto(Agent):
             if trafficLight.green and trafficLight.timer >= 4 and self.passedLight == False:
               nextmove = (self.pos[0], self.pos[1] + self.direction)
               move = True
+          if self.checkNeighbors(neighborList, "automobile") == "automobile":
+            move = False
         else:
           #Significa que ya no hay camino en vertical y ahora comenzará el movimiento en horizontal (X)
           self.horizontal = True

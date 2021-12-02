@@ -15,8 +15,8 @@ class Auto(Agent):
     self.index = 0
     self.horizontal = False
     self.direction = 1 #
-    self.assignDirection()
-    self.lane = lane 
+    self.lane = lane
+    self.assignDirection() 
     self.passedLight = False
 
 
@@ -62,22 +62,29 @@ class Auto(Agent):
     else:
       leftAndRight = False
       neighborList =  self.model.grid[self.pos[0] - 1][self.pos[1]]
-      if self.checkNeighbors(neighborList, "normalBlock") == "normalBlock":
+      if self.lane == False and self.checkNeighbors(neighborList, "normalBlock") == "normalBlock":
+          leftAndRight = True
+      
+      if self.lane and self.checkNeighbors(neighborList, "normalBlockLeft") == "normalBlockLeft":
           leftAndRight = True
       
       neighborList = self.model.grid[self.pos[0] + 1][self.pos[1]]
-      if self.checkNeighbors(neighborList, "normalBlock") == "normalBlock":
+      if self.lane == False and self.checkNeighbors(neighborList, "normalBlock") == "normalBlock":
+          leftAndRight = True
+      
+      if self.lane and self.checkNeighbors(neighborList, "normalBlockLeft") == "normalBlockLeft":
           leftAndRight = True
       
       if leftAndRight:
-        self.horizontal = False
+        self.horizontal = True
         self.direction = -1
       else:
         self.horizontal = False
-        self.direction = -1
+        self.direction = 1
+      print("POSITION", self.pos)
     
-    print("HORIZONTAL = ", self.horizontal)
-    print("DIRECTION = ", self.direction)
+    # print("HORIZONTAL = ", self.horizontal)
+    # print("DIRECTION = ", self.direction)
       
 
   def step(self):
@@ -287,29 +294,7 @@ class Street(Model):
     self.rows = len(self.matrix)
     self.columns = len(self.matrix[0])
     self.placeBlocks()
-    # auto = Auto(self,(2,65),False)
-    # self.grid.place_agent(auto, auto.pos)
-    # self.schedule.add(auto)
-    # auto = Auto(self,(2,63),False)
-    # self.grid.place_agent(auto, auto.pos)
-    # self.schedule.add(auto)
-    # auto = Auto(self,(2,61),False)
-    # self.grid.place_agent(auto, auto.pos)
-    # self.schedule.add(auto)
-    # auto = Auto(self,(0,0),False)
-    # self.grid.place_agent(auto, auto.pos)
-    # self.schedule.add(auto)
-
-    for x in range(1,3):
-      if x % 2 == 0: #Gray
-        automobile = Auto(self, (x, self.columns-x),False)
-        self.grid.place_agent(automobile, automobile.pos)
-        self.schedule.add(automobile)
-
-      else: #Yellow
-        automobile = Auto(self, (x, self.columns-x),True)
-        self.grid.place_agent(automobile, automobile.pos)
-        self.schedule.add(automobile)
+    self.placeAutos()
 
 
   def step(self):
@@ -340,6 +325,18 @@ class Street(Model):
       elif self.matrix[y][x] == 4:
         block = StreetBlock(self,(x,y), "normalBlockBoth")
         self.grid.place_agent(block, block.pos)
+  
+  def placeAutos(self):
+    #Se crean los autos de la ciudad
+    for i in range (4,10):
+      #se crean los autos del carril interior
+      automobile = Auto(self, (1, self.rows - i),True)
+      self.grid.place_agent(automobile, automobile.pos)
+      self.schedule.add(automobile)
+      #crear los autos del carril exterior
+      automobile = Auto(self, (i + 5, self.rows - 3),False)
+      self.grid.place_agent(automobile, automobile.pos)
+      self.schedule.add(automobile)
 
   
 
@@ -362,6 +359,6 @@ def agent_portrayal(agent):
 
 grid = CanvasGrid(agent_portrayal, 67, 68, 450, 450)
 
-# server = ModularServer(Street, [grid], "Multicity", {})
-# server.port = 8521
-# server.launch()
+server = ModularServer(Street, [grid], "Multicity", {})
+server.port = 8521
+server.launch()

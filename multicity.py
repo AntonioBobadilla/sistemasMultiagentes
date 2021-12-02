@@ -357,8 +357,8 @@ def agent_portrayal(agent):
   elif (agent.type == "trafficLightRed"):
     return {"Shape": "rect", "w": 1, "h": 1, "Filled": "true", "Color": "Red", "Layer": 0}
 
-grid = CanvasGrid(agent_portrayal, 67, 68, 450, 450)
-
-server = ModularServer(Street, [grid], "Multicity", {})
-server.port = 8521
-server.launch()
+if __name__ == "__main__":
+  grid = CanvasGrid(agent_portrayal, 67, 68, 450, 450)
+  server = ModularServer(Street, [grid], "Multicity", {})
+  server.port = 8521
+  server.launch()

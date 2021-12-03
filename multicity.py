@@ -5,7 +5,7 @@ from mesa.time import RandomActivation
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 from numpy import true_divide
-from pathfinding.core.diagonal_movement import DiagonalMovement
+#from pathfinding.core.diagonal_movement import DiagonalMovement
 
 class Auto(Agent):
   def __init__(self, model, pos, lane):
@@ -328,15 +328,16 @@ class Street(Model):
   
   def placeAutos(self):
     #Se crean los autos de la ciudad
-    for i in range (4,10):
-      #se crean los autos del carril interior
-      automobile = Auto(self, (1, self.rows - i),True)
-      self.grid.place_agent(automobile, automobile.pos)
-      self.schedule.add(automobile)
-      #crear los autos del carril exterior
-      automobile = Auto(self, (i + 5, self.rows - 3),False)
-      self.grid.place_agent(automobile, automobile.pos)
-      self.schedule.add(automobile)
+    for i in range (4,20):
+      if i%3 == 0:
+      #se crean los autos del carril interior (gris)
+        automobile = Auto(self, (1, self.rows - i),True)
+        self.grid.place_agent(automobile, automobile.pos)
+        self.schedule.add(automobile)
+      #crear los autos del carril exterior (amarillo)
+        automobile = Auto(self, (i + 14, self.rows - 3),False)
+        self.grid.place_agent(automobile, automobile.pos)
+        self.schedule.add(automobile)
 
   
 
